@@ -1,0 +1,8 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: dockerfile
+    tty: true
+    ports:
+      - "8000:8000"

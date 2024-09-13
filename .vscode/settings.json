@@ -1,0 +1,8 @@
+{
+  "editor.defaultFormatter": "charliermarsh.ruff",
+  "editor.formatOnType": true,
+  "editor.codeActionsOnSave": {
+    // 保存時にimportを整理
+    "source.organizeImports": "explicit"
+  },
+}

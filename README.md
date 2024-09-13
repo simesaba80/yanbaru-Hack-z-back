@@ -16,3 +16,11 @@ uvicorn 'backend.main:app' --host=0.0.0.0 --port=8000
 ```bash
 docker compose up -d
 ```
+
+# commitする時は
+フォーマットとリントをかけること
+```
+poetry run ruff format .
+
+poetry run ruff check .
+```

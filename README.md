@@ -9,7 +9,7 @@ poetry install
 
 ## 開発サーバーの起動
 ```bash
-uvicorn 'backend.main:app' --host=0.0.0.0 --port=8000
+poetry run uvicorn 'backend.main:app' --host=0.0.0.0 --port=8000
 ```
 
 ## Dockerfile起動時

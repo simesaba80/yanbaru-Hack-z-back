@@ -4,5 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv(verbose=True)
 
-# Load environment variables
-DATABASE_URL = os.getenv("DATABASE_URL")
+
+class Config:
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    ALGORITHM = os.getenv("ALGORITHM")
+
+
+config = Config()

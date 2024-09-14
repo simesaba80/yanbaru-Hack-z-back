@@ -3,19 +3,17 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 import backend.schema.match as match_schema
+from backend.utils import config
 
 router = APIRouter()
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id is None:
             raise HTTPException(

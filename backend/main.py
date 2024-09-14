@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from backend.router import voice
+from backend.router import match, voice
 
 app = FastAPI()
 
@@ -11,3 +11,4 @@ async def root():
 
 
 app.include_router(voice.router)
+app.include_router(match.router)

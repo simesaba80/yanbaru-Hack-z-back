@@ -38,6 +38,7 @@ RUN pip install poetry \
   && poetry config virtualenvs.create false
 
 COPY ./pyproject.toml ./poetry.lock* ./
+RUN apt-get update && apt-get install -y ffmpeg
 RUN poetry install
 
 # Switch to the non-privileged user to run the application.

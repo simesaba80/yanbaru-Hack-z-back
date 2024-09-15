@@ -13,6 +13,12 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
+@router.get("/color/getall", response_model=list[color_schema.ColorResponse])
+async def get_all(db=Depends(get_db)):
+    records = db.query(Color).all()
+    return records
+
+
 @router.get("/color/get", response_model=color_schema.ColorResponse)
 async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
     payload = get_payload_from_token(token)

@@ -1,4 +1,5 @@
-from backend.db import Base, engine
+from backend.db import engine
+from backend.models.voice import Base
 
 # 接続テスト
 try:

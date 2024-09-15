@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class RecordingResponseModel(Base):
-    __tablename__ = "recording_responses"
+class Record(Base):
+    __tablename__ = "record"
 
     id = Column(Integer, primary_key=True, index=True)
     color1 = Column(String, nullable=False)

@@ -1,9 +1,9 @@
-from analysis.amplitude_peak_detector import amplitude_peak_detector
-from analysis.syllable_detector import syllable_detector
-from analysis.divide_at_min_peak import divide_at_min_peak
-from analysis.exclude_weakest_syllable import exclude_weakest_syllable
+from services.amplitude_peak_detector import amplitude_peak_detector
+from services.syllable_detector import syllable_detector
+from services.divide_at_min_peak import divide_at_min_peak
+from services.exclude_weakest_syllable import exclude_weakest_syllable
 
-from analysis.waveform_drawer import waveform_drawer
+from services.waveform_drawer import waveform_drawer
 
 """
 syllable_list内のリストが4つになるように調整する

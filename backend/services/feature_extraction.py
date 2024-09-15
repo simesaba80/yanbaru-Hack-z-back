@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
-from analysis.cutting_sound import cutting_sound
-from analysis.speech_rating import speech_rating
-from analysis.sound_display import sound_display
-from analysis.average_amplitude_calculator import average_amplitude_calculator
+from services.cutting_sound import cutting_sound
+from services.speech_rating import speech_rating
+from services.sound_display import sound_display
+from services.average_amplitude_calculator import average_amplitude_calculator
 
-from analysis.modifing_syllable import modifing_syllable
-from analysis.syllable_max_amplitude import syllable_max_amplitude
-from analysis.syllable_wave_detector import syllable_wave_detector
+from services.modifing_syllable import modifing_syllable
+from services.syllable_max_amplitude import syllable_max_amplitude
+from services.syllable_wave_detector import syllable_wave_detector
 
 
 @dataclass

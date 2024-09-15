@@ -1,7 +1,7 @@
 from pydub import AudioSegment
 from dataclasses import dataclass
 
-from feature_extraction import feature_extraction
+from services.feature_extraction import feature_extraction
 
 
 @dataclass
@@ -15,7 +15,7 @@ class Feature:
 
 
 # 音声ファイルの読み込み
-sound = AudioSegment.from_file("iasa.m4a", "m4a")
+sound = AudioSegment.from_file("sample.ogg", format="ogg")
 
 # 特徴量抽出
 feature = feature_extraction(sound)

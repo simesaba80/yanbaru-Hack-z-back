@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from fastapi import HTTPException
+
 from backend.services.average_amplitude_calculator import average_amplitude_calculator
 from backend.services.cutting_sound import cutting_sound
 from backend.services.midi_pitch_calculator import midi_pitch_calculator
@@ -72,5 +74,8 @@ def feature_extraction(sound):
     feature = Feature(
         speech_rate, pitch, syllable_1, syllable_2, syllable_3, syllable_4
     )
+
+    if None in feature:
+        raise HTTPException(status_code=400, detail="Bad Request")
 
     return feature

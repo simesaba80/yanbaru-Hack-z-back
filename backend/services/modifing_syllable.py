@@ -11,28 +11,9 @@ syllable_list内のリストが4つになるように調整する
 """
 
 
-def handle_peak_detection_exception(exception_list):
-    """
-    例外処理
-    """
-    if len(exception_list) == 0:
-        raise HTTPException(status_code=400, detail="Bad Request")
-
-    # ratioが3.0に最も近いsyllable_listを返す
-    syllable_list = min(exception_list, key=lambda x: abs(x[1] - 3.0))[0]
-
-    # 最大振幅が最も小さいピークのかたまりをsyllable_listから除外する
-    syllable_list = exclude_weakest_syllable(syllable_list)
-
-    return syllable_list
-
-
 def modifing_syllable(sound, average_amplitude):
     # 倍率の初期化
     ratio = 10.0
-
-    # 例外処理への準備（リストの長さが5つのときのsyllable_listとratioを保持するリストを作成）
-    exception_list = []
 
     # 音声のピーク検出
     # amplitude_peak_list内にはピークの点とその振幅が詰まっている
@@ -55,13 +36,8 @@ def modifing_syllable(sound, average_amplitude):
         # 音節の検出
         syllable_list = syllable_detector(sound, amplitude_peak_list)
 
-        # 例外処理への準備（リストの長さが5つのときのsyllable_listとratioを保持する）
-        if len(syllable_list) == 5:
-            exception_list.append([syllable_list, ratio])
-
         if ratio == 0:
-            handle_peak_detection_exception(exception_list)
-            break
+            raise HTTPException(status_code=400, detail="Bad Request")
 
     # syllable_list内のピークのまとまりが4つある内、ピークのまとまりの要素数が3000以上のとき、
     for i in range(len(syllable_list)):

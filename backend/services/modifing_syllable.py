@@ -68,6 +68,6 @@ def modifing_syllable(sound, average_amplitude):
             syllable_list = exclude_weakest_syllable(syllable_list)
 
     # 音声の波形表示
-    waveform_drawer(sound, average_amplitude, amplitude_peak_list, syllable_list)
+    # waveform_drawer(sound, average_amplitude, amplitude_peak_list, syllable_list)
 
     return syllable_list

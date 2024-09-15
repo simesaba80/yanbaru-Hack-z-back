@@ -13,12 +13,12 @@ from backend.services.syllable_wave_detector import syllable_wave_detector
 
 @dataclass
 class Feature:
-    speech_rate: str  # 話速
-    pitch: str  # 音程
-    syllable_1: str  # 第一音節のタイプ
-    syllable_2: str  # 第二音節のタイプ
-    syllable_3: str  # 第三音節のタイプ
-    syllable_4: str  # 第四音節のタイプ
+    speech_rate: int  # 話速
+    pitch: int  # 音程
+    syllable_1: int  # 第一音節のタイプ
+    syllable_2: int  # 第二音節のタイプ
+    syllable_3: int  # 第三音節のタイプ
+    syllable_4: int  # 第四音節のタイプ
 
 
 def feature_extraction(sound):
@@ -49,17 +49,18 @@ def feature_extraction(sound):
         first_number = syllable_max_amplitude(
             modified_syllable_list[number], average_amplitude
         )
-        print("first_number : ", first_number)
+        # print("first_number : ", first_number)
         # 音節の波形検出
         second_number = syllable_wave_detector(
             modified_syllable_list[number], average_amplitude
         )
-        print("second_number : ", second_number)
+        # print("second_number : ", second_number)
 
         syllable_number = first_number * second_number
-        print("syllable_number : ", syllable_number)
+        syllable_number -= 1
+        # print("syllable_number : ", syllable_number)
 
-        syllable_number = hex(syllable_number)[2:].upper()
+        # syllable_number = hex(syllable_number)[2:].upper()
 
         if number == 0:
             syllable_1 = syllable_number

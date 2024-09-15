@@ -39,4 +39,5 @@ def midi_pitch_calculator(sound):
 
     pitch_class = get_pitch_class(frequency)
 
-    return hex(pitch_class)[2:].upper()
+    # return hex(pitch_class)[2:].upper()
+    return pitch_class

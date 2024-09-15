@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def waveform_drawer(sound, average_amplitude, amplitude_peak_list, syllable_list):
@@ -42,11 +42,11 @@ def waveform_drawer(sound, average_amplitude, amplitude_peak_list, syllable_list
     ax01.legend()
 
     # ピークを小さな青い点で表示
-    for peak in amplitude_peak_list:
-        ax01.plot(tm[peak], sig[peak], "bo", markersize=1)
+    # for peak in amplitude_peak_list:
+    #    ax01.plot(tm[peak], sig[peak], "bo", markersize=1)
 
     # sybllable_listを緑の点で表示
-    for syllable in syllable_list:
-        ax01.plot(tm[syllable], sig[syllable], "go", markersize=2)
+    # for syllable in syllable_list:
+    #    ax01.plot(tm[syllable], sig[syllable], "go", markersize=2)
 
     # plt.show()

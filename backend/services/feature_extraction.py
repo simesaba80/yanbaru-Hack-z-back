@@ -4,7 +4,8 @@ from backend.services.average_amplitude_calculator import average_amplitude_calc
 from backend.services.cutting_sound import cutting_sound
 from backend.services.midi_pitch_calculator import midi_pitch_calculator
 from backend.services.modifing_syllable import modifing_syllable
-from backend.services.sound_display import sound_display
+
+# from backend.services.sound_display import sound_display
 from backend.services.speech_rating import speech_rating
 from backend.services.syllable_max_amplitude import syllable_max_amplitude
 from backend.services.syllable_wave_detector import syllable_wave_detector
@@ -31,7 +32,7 @@ def feature_extraction(sound):
     pitch = midi_pitch_calculator(cutted_sound)
 
     # 音声の情報表示
-    sound_display(cutted_sound)
+    # sound_display(cutted_sound)
 
     # 平均振幅の計算
     average_amplitude = average_amplitude_calculator(cutted_sound)

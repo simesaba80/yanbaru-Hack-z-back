@@ -52,15 +52,15 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     feature = sound_research("/tmp/hoge.ogg")
     color1_data = (
         "#"
-        + format(feature.speech_rate, "x")
-        + format(feature.pitch, "x")
-        + format(feature.syllable_1, "x")
+        + format(feature.speech_rate * 16, "x")
+        + format(feature.pitch * 16, "x")
+        + format(feature.syllable_1 * 16, "x")
     )
     color2_data = (
         "#"
-        + format(feature.syllable_2, "x")
-        + format(feature.syllable_3, "x")
-        + format(feature.syllable_4, "x")
+        + format(feature.syllable_2 * 16, "x")
+        + format(feature.syllable_3 * 16, "x")
+        + format(feature.syllable_4 * 16, "x")
     )
     color_data = color_cruds.registar_color(db, user_data.id, color1_data, color2_data)
     print(payload.get("user_id"))

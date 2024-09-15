@@ -2,7 +2,8 @@ from backend.services.amplitude_peak_detector import amplitude_peak_detector
 from backend.services.divide_at_min_peak import divide_at_min_peak
 from backend.services.exclude_weakest_syllable import exclude_weakest_syllable
 from backend.services.syllable_detector import syllable_detector
-from backend.services.waveform_drawer import waveform_drawer
+
+# from backend.services.waveform_drawer import waveform_drawer
 
 """
 syllable_list内のリストが4つになるように調整する

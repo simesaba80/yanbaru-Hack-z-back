@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -49,11 +51,14 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
         raise HTTPException(status_code=404, detail="User not found")
     file_path = color_cruds.get_filepath_by_id(db, user_data.user_id)
     download_blob("yanbaru-eisa-storage-bucket-prod", file_path, "/tmp/hoge.ogg")
+    if not os.path.exists("/tmp/hoge.ogg"):
+        raise HTTPException(status_code=404, detail="File not found")
     feature = sound_research("/tmp/hoge.ogg")
     color1_data, color2_data = feature_to_color(feature)
     color_data = color_cruds.registar_color(
         db, user_data.user_id, color1_data, color2_data
     )
+    os.remove("/tmp/hoge.ogg")
     return color_schema.ColorResponse(
         id=color_data.id, color1=color_data.color1, color2=color_data.color2
     )

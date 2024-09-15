@@ -16,6 +16,7 @@ sqlalchemy = "^2.0.34"
 psycopg2-binary = "^2.9.9"
 pydub = "^0.25.1"
 matplotlib = "^3.9.2"
+google-cloud-storage = "^2.18.2"
 
 
 [build-system]

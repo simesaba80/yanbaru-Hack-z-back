@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from google.cloud import storage
 from sqlalchemy.orm import Session
 
 import backend.schema.color as color_schema
@@ -10,6 +11,21 @@ from backend.utils.decode import get_payload_from_token
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+def download_blob(bucket_name: str, source_blob_name: str, destination_file_name: str):
+    """Google Cloud Storageからファイルをダウンロードする"""
+    try:
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(source_blob_name)
+        blob.download_to_filename(destination_file_name)
+
+        print(f"Blob {source_blob_name} downloaded to {destination_file_name}.")
+        return destination_file_name
+    except Exception as e:
+        print(f"Error downloading blob: {e}")
+        raise HTTPException(status_code=500, detail="Error downloading file")
 
 
 @router.get("/color/get", response_model=color_schema.ColorResponse)
@@ -45,7 +61,9 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     )
     if user_data is None:
         raise HTTPException(status_code=404, detail="User not found")
-
+    download_blob(
+        "yanbaru-eisa-storage-bucket-prod", user_data.eisafile, "/tmp/hoge.ogg"
+    )
     new_recording = Color(
         id=user_data.id,
         color1="#000000",

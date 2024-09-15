@@ -26,7 +26,7 @@ test_user = User(
     username="testuser",
     password="testpassword",
     email="kizuku@example.com",
-    eisafile="test.ogg",
+    eisafile="hoge.ogg",
 )
 session.add(test_user)
 session.commit()

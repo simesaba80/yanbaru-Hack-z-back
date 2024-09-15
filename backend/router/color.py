@@ -6,6 +6,7 @@ import backend.schema.color as color_schema
 from backend.db import get_db
 from backend.models.color import Color, User
 from backend.utils.decode import get_payload_from_token
+from backend.utils.download import download_blob
 
 router = APIRouter()
 
@@ -45,7 +46,9 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     )
     if user_data is None:
         raise HTTPException(status_code=404, detail="User not found")
-
+    download_blob(
+        "yanbaru-eisa-storage-bucket-prod", user_data.eisafile, "/tmp/hoge.ogg"
+    )
     new_recording = Color(
         id=user_data.id,
         color1="#000000",

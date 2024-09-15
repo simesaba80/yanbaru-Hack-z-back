@@ -1,5 +1,5 @@
 # 環境構築
-python3.12.6とpoeetryを使用
+python3.12.6とpoeetry1.8.2を使用
 Lintter、formatterにruff
 
 ## パッケージのインストール
@@ -17,6 +17,8 @@ poetry run uvicorn 'backend.main:app' --host=0.0.0.0 --port=8000
 ```bash
 docker compose up -d
 ```
+コンテナ起動後backend-serverのコンテナ内で`python ./backend/seed.py`を実行すること
+
 
 # commitする時は
 フォーマットとリントをかけること

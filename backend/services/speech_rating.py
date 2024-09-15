@@ -20,8 +20,7 @@ def speech_rating(sound):
         3500,
     ]
 
-    # もし値がNoneの場合、15を返す
-    if duration_ms is None:
+    if duration_ms > 3500:
         return 15
 
     # 話速の分類

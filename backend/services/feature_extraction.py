@@ -7,6 +7,7 @@ from backend.services.sound_display import sound_display
 from backend.services.speech_rating import speech_rating
 from backend.services.syllable_max_amplitude import syllable_max_amplitude
 from backend.services.syllable_wave_detector import syllable_wave_detector
+from midi_pitch_calculator import midi_pitch_calculator
 
 
 @dataclass
@@ -27,7 +28,7 @@ def feature_extraction(sound):
     speech_rate = speech_rating(cutted_sound)
 
     # 音程の検出
-    pitch = "A"
+    pitch = midi_pitch_calculator(cutted_sound)
 
     # 音声の情報表示
     sound_display(cutted_sound)

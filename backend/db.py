@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from backend.utils import config
 
@@ -8,11 +9,14 @@ db_url = config.config.DB_URL
 # SQLAlchemyエンジンを作成
 engine = create_engine(db_url)
 
-# 接続テスト
-try:
-    connection = engine.connect()
-    print("データベースへの接続に成功しました！")
-except Exception as e:
-    print(f"データベースへの接続エラー: {e}")
-finally:
-    connection.close()
+# セッションローカルクラスを作成
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+# データベースセッションを取得する関数を定義
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

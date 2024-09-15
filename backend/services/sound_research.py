@@ -1,7 +1,8 @@
-from pydub import AudioSegment
 from dataclasses import dataclass
 
-from services.feature_extraction import feature_extraction
+from pydub import AudioSegment
+
+from backend.services.feature_extraction import feature_extraction
 
 
 @dataclass

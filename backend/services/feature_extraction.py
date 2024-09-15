@@ -1,13 +1,12 @@
 from dataclasses import dataclass
 
-from services.cutting_sound import cutting_sound
-from services.speech_rating import speech_rating
-from services.sound_display import sound_display
-from services.average_amplitude_calculator import average_amplitude_calculator
-
-from services.modifing_syllable import modifing_syllable
-from services.syllable_max_amplitude import syllable_max_amplitude
-from services.syllable_wave_detector import syllable_wave_detector
+from backend.services.average_amplitude_calculator import average_amplitude_calculator
+from backend.services.cutting_sound import cutting_sound
+from backend.services.modifing_syllable import modifing_syllable
+from backend.services.sound_display import sound_display
+from backend.services.speech_rating import speech_rating
+from backend.services.syllable_max_amplitude import syllable_max_amplitude
+from backend.services.syllable_wave_detector import syllable_wave_detector
 
 
 @dataclass

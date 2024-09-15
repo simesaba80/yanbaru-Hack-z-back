@@ -7,12 +7,13 @@ Lintter、formatterにruff
 poetry install
 ```
 
-## 開発サーバーの起動
+## SwaggerUIの確認
 ```bash
 poetry run uvicorn 'backend.main:app' --host=0.0.0.0 --port=8000
 ```
+して`http://localhost:8000/docs`にアクセス
 
-## Dockerfile起動時
+## 開発用サーバー起動時
 ```bash
 docker compose up -d
 ```

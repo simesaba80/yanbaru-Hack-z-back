@@ -3,8 +3,6 @@ from backend.services.divide_at_min_peak import divide_at_min_peak
 from backend.services.exclude_weakest_syllable import exclude_weakest_syllable
 from backend.services.syllable_detector import syllable_detector
 
-# from backend.services.waveform_drawer import waveform_drawer
-
 """
 syllable_list内のリストが4つになるように調整する
 まず倍率ratioを0.2ずつ調整してamplitude_peakを再調整し、ピークの点をamplitude_peak_listに再度詰め込む
@@ -68,7 +66,7 @@ def modifing_syllable(sound, average_amplitude):
             # 最大振幅が最も小さいピークのかたまりをsyllable_listから除外する
             syllable_list = exclude_weakest_syllable(syllable_list)
 
-    # 音声の波形表示
-    # waveform_drawer(sound, average_amplitude, amplitude_peak_list, syllable_list)
+    # 倍率を表示
+    print("倍率 : ", ratio)
 
     return syllable_list

@@ -4,8 +4,7 @@ from backend.services.average_amplitude_calculator import average_amplitude_calc
 from backend.services.cutting_sound import cutting_sound
 from backend.services.midi_pitch_calculator import midi_pitch_calculator
 from backend.services.modifing_syllable import modifing_syllable
-
-# from backend.services.sound_display import sound_display
+from backend.services.sound_display import sound_display
 from backend.services.speech_rating import speech_rating
 from backend.services.syllable_max_amplitude import syllable_max_amplitude
 from backend.services.syllable_wave_detector import syllable_wave_detector
@@ -31,9 +30,6 @@ def feature_extraction(sound):
     # 音程の検出
     pitch = midi_pitch_calculator(cutted_sound)
 
-    # 音声の情報表示
-    # sound_display(cutted_sound)
-
     # 平均振幅の計算
     average_amplitude = average_amplitude_calculator(cutted_sound)
 
@@ -49,18 +45,16 @@ def feature_extraction(sound):
         first_number = syllable_max_amplitude(
             modified_syllable_list[number], average_amplitude
         )
-        # print("first_number : ", first_number)
         # 音節の波形検出
         second_number = syllable_wave_detector(
             modified_syllable_list[number], average_amplitude
         )
-        # print("second_number : ", second_number)
 
         syllable_number = first_number * second_number
         syllable_number -= 1
-        # print("syllable_number : ", syllable_number)
 
-        # syllable_number = hex(syllable_number)[2:].upper()
+        if (syllable_number is None) or (syllable_number < 0):
+            syllable_number = 15
 
         if number == 0:
             syllable_1 = syllable_number
@@ -71,9 +65,12 @@ def feature_extraction(sound):
         else:
             syllable_4 = syllable_number
 
-        # 構造体Featureに格納
-        feature = Feature(
-            speech_rate, pitch, syllable_1, syllable_2, syllable_3, syllable_4
-        )
+    # 音声の情報表示
+    sound_display(cutted_sound)
+
+    # 構造体Featureに格納
+    feature = Feature(
+        speech_rate, pitch, syllable_1, syllable_2, syllable_3, syllable_4
+    )
 
     return feature

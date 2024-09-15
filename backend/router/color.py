@@ -2,9 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
+import backend.cruds.color as color_cruds
 import backend.schema.color as color_schema
 from backend.db import get_db
-from backend.models.color import Color, User
+from backend.models.color import Color
+from backend.services.sound_research import sound_research
 from backend.utils.decode import get_payload_from_token
 from backend.utils.download import download_blob
 
@@ -24,12 +26,7 @@ async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
     payload = get_payload_from_token(token)
     email = payload.get("email")
     password = payload.get("password")
-    user_data = (
-        db.query(User)
-        .filter(User.email == email)
-        .filter(User.password == password)
-        .first()
-    )
+    user_data = color_cruds.search_user(db, email, password)
     if user_data is None:
         raise HTTPException(status_code=404, detail="User not found")
     color_data = db.query(Color).filter(Color.id == user_data.id).first()
@@ -44,32 +41,31 @@ async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
 async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # Assuming you have a database session and models set up
     payload = get_payload_from_token(token)
-    user_data = (
-        db.query(User)
-        .filter(User.email == payload.get("email"))
-        .filter(User.password == payload.get("password"))
-        .first()
-    )
+    email = payload.get("email")
+    password = payload.get("password")
+    user_data = color_cruds.search_user(db, email, password)
     if user_data is None:
         raise HTTPException(status_code=404, detail="User not found")
     download_blob(
         "yanbaru-eisa-storage-bucket-prod", user_data.eisafile, "/tmp/hoge.ogg"
     )
-    new_recording = Color(
-        id=user_data.id,
-        color1="#000000",
-        color2="#FFFFFF",
-        # Add other fields as necessary
+    feature = sound_research("/tmp/hoge.ogg")
+    color1_data = (
+        "#"
+        + format(feature.speech_rate, "x")
+        + format(feature.pitch, "x")
+        + format(feature.syllable_1, "x")
     )
-    record_data = db.query(Color).filter(Color.id == user_data.id).first()
-    if record_data is not None:
-        raise HTTPException(status_code=404, detail="Record already exists")
-    db.add(new_recording)
-    db.commit()
-    db.refresh(new_recording)
+    color2_data = (
+        "#"
+        + format(feature.syllable_2, "x")
+        + format(feature.syllable_3, "x")
+        + format(feature.syllable_4, "x")
+    )
+    color_data = color_cruds.registar_color(db, user_data.id, color1_data, color2_data)
     print(payload.get("user_id"))
     return color_schema.ColorResponse(
-        id=new_recording.id, color1="#000000", color2=new_recording.color2
+        id=color_data.id, color1=color_data.color1, color2=color_data.color2
     )
 
 
@@ -82,12 +78,7 @@ async def get_recording(
     email = payload.get("email")
     password = payload.get("password")
     try:
-        user_data = (
-            db.query(User)
-            .filter(User.email == email)
-            .filter(User.password == password)
-            .first()
-        )
+        user_data = color_cruds.search_user(db, email, password)
         if user_data is None:
             raise HTTPException(status_code=404, detail="User not found")
         record_id = user_data.id
@@ -96,11 +87,14 @@ async def get_recording(
             raise HTTPException(status_code=404, detail="Record not found")
         # Update the record as needed
         record.color1 = "#FF0000"  # Example update
-        db.commit()
-        db.refresh(record)
+        updated_record = color_cruds.update_color(
+            db, record.id, record.color1, record.color2
+        )
 
         return color_schema.ColorResponse(
-            id=record.id, color1=record.color1, color2=record.color2
+            id=updated_record.id,
+            color1=updated_record.color1,
+            color2=updated_record.color2,
         )
     except Exception as e:
         db.rollback()

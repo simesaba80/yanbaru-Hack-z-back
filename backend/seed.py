@@ -1,5 +1,7 @@
+from sqlalchemy.orm import sessionmaker
+
 from backend.db import engine
-from backend.models.voice import Base
+from backend.models.voice import Base, User
 
 # 接続テスト
 try:
@@ -14,3 +16,20 @@ finally:
 Base.metadata.drop_all(bind=engine)
 # データベースのテーブルを作成
 Base.metadata.create_all(bind=engine)
+
+# セッションの作成
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# テストデータの挿入
+test_user = User(
+    username="testuser",
+    password="testpassword",
+    email="kizuku@example.com",
+    eisafile="testfile",
+)
+session.add(test_user)
+session.commit()
+
+# セッションのクローズ
+session.close()

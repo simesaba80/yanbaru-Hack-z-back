@@ -12,7 +12,7 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-@router.get("/matching", response_model=color_schema.ColorResponse)
+@router.get("/color/get", response_model=color_schema.ColorResponse)
 async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
     payload = get_payload_from_token(token)
     email = payload.get("email")
@@ -33,7 +33,7 @@ async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
     )
 
 
-@router.post("/recording", response_model=color_schema.ColorResponse)
+@router.post("/color/record", response_model=color_schema.ColorResponse)
 async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # Assuming you have a database session and models set up
     payload = get_payload_from_token(token)
@@ -64,7 +64,7 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     )
 
 
-@router.put("/recordingupdate", response_model=color_schema.ColorResponse)
+@router.put("/color/update", response_model=color_schema.ColorResponse)
 async def get_recording(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),

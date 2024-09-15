@@ -9,6 +9,7 @@ import backend.schema.color as color_schema
 from backend.db import get_db
 from backend.models.color import Color
 from backend.services.sound_research import sound_research
+from backend.utils.config import config
 from backend.utils.decode import get_payload_from_token
 from backend.utils.download import download_blob
 from backend.utils.makecolor import feature_to_color
@@ -35,7 +36,17 @@ async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
     color_data = db.query(Color).filter(Color.id == user_data.user_id).first()
     if color_data is None:
         raise HTTPException(status_code=404, detail="Record not found")
-    return color_schema.MatchingResponse(
+    return color_schema.ColorResponse(
+        id=color_data.id, color1=color_data.color1, color2=color_data.color2
+    )
+
+
+@router.get("/color/get/{user_id}", response_model=color_schema.ColorResponse)
+async def get_by_id(user_id: str, db=Depends(get_db)):
+    color_data = db.query(Color).filter(Color.id == user_id).first()
+    if color_data is None:
+        raise HTTPException(status_code=404, detail="Record not found")
+    return color_schema.ColorResponse(
         id=color_data.id, color1=color_data.color1, color2=color_data.color2
     )
 
@@ -50,7 +61,7 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     if user_data is None:
         raise HTTPException(status_code=404, detail="User not found")
     file_path = color_cruds.get_filepath_by_id(db, user_data.user_id)
-    download_blob("yanbaru-eisa-storage-bucket-prod", file_path, "/tmp/hoge.ogg")
+    download_blob(config.BUCKET_NAME, file_path, "/tmp/hoge.ogg")
     if not os.path.exists("/tmp/hoge.ogg"):
         raise HTTPException(status_code=404, detail="File not found")
     feature = sound_research("/tmp/hoge.ogg")
@@ -82,7 +93,7 @@ async def get_recording(
             raise HTTPException(status_code=404, detail="Record not found")
         # Update the record as needed
         file_path = color_cruds.get_filepath_by_id(db, user_data.user_id)
-        download_blob("yanbaru-eisa-storage-bucket-prod", file_path, "/tmp/hoge.ogg")
+        download_blob(config.BUCKET_NAME, file_path, "/tmp/hoge.ogg")
         if not os.path.exists("/tmp/hoge.ogg"):
             raise HTTPException(status_code=404, detail="File not found")
         feature = sound_research("/tmp/hoge.ogg")

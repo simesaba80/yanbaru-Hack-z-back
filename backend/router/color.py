@@ -35,7 +35,17 @@ async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
     color_data = db.query(Color).filter(Color.id == user_data.user_id).first()
     if color_data is None:
         raise HTTPException(status_code=404, detail="Record not found")
-    return color_schema.MatchingResponse(
+    return color_schema.ColorResponse(
+        id=color_data.id, color1=color_data.color1, color2=color_data.color2
+    )
+
+
+@router.get("/color/get/{user_id}", response_model=color_schema.ColorResponse)
+async def get_by_id(user_id: str, db=Depends(get_db)):
+    color_data = db.query(Color).filter(Color.id == user_id).first()
+    if color_data is None:
+        raise HTTPException(status_code=404, detail="Record not found")
+    return color_schema.ColorResponse(
         id=color_data.id, color1=color_data.color1, color2=color_data.color2
     )
 

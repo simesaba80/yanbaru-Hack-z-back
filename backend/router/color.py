@@ -81,7 +81,7 @@ async def get_recording(
         feature = sound_research("/tmp/hoge.ogg")
         color1_data, color2_data = feature_to_color(feature)
         updated_record = color_cruds.update_color(
-            db, record.id, record.color1, record.color2
+            db, record.id, color1_data, color2_data
         )
 
         return color_schema.ColorResponse(

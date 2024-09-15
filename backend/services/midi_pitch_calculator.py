@@ -39,5 +39,8 @@ def midi_pitch_calculator(sound):
 
     pitch_class = get_pitch_class(frequency)
 
-    # return hex(pitch_class)[2:].upper()
+    # もしfrequencyがNoneの場合、15を返す
+    if frequency is None:
+        return 15
+
     return pitch_class

@@ -20,8 +20,11 @@ def speech_rating(sound):
         3500,
     ]
 
+    # もし値がNoneの場合、15を返す
+    if duration_ms is None:
+        return 15
+
     # 話速の分類
     for i, threshold in enumerate(thresholds):
         if duration_ms <= threshold:
-            # return hex(i)[2:].upper()
             return i

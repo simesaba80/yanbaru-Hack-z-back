@@ -17,12 +17,11 @@ class Feature:
 
 def sound_research(audio_file):
     # 音声ファイルの読み込み
-    # 音声ファイルaudio_fileはファイル名である。つまりstring型
     sound = AudioSegment.from_file(audio_file)
 
     # 特徴量抽出
     feature = feature_extraction(sound)
 
-    print("feature: ", feature)
+    print("特徴量: ", feature)
 
     return feature

@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-import backend.schema.voice as voice_schema
+import backend.schema.color as color_schema
 from backend.db import get_db
-from backend.models.voice import Record, User
+from backend.models.color import Color, User
 from backend.utils.decode import get_payload_from_token
 
 router = APIRouter()
@@ -12,7 +12,28 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-@router.post("/recording", response_model=voice_schema.RecordingResponse)
+@router.get("/matching", response_model=color_schema.ColorResponse)
+async def matching(token: str = Depends(oauth2_scheme), db=Depends(get_db)):
+    payload = get_payload_from_token(token)
+    email = payload.get("email")
+    password = payload.get("password")
+    user_data = (
+        db.query(User)
+        .filter(User.email == email)
+        .filter(User.password == password)
+        .first()
+    )
+    if user_data is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    color_data = db.query(Color).filter(Color.id == user_data.id).first()
+    if color_data is None:
+        raise HTTPException(status_code=404, detail="Record not found")
+    return color_schema.MatchingResponse(
+        color1=color_data.color1, color2=color_data.color2
+    )
+
+
+@router.post("/recording", response_model=color_schema.ColorResponse)
 async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # Assuming you have a database session and models set up
     payload = get_payload_from_token(token)
@@ -25,25 +46,25 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     if user_data is None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    new_recording = Record(
+    new_recording = Color(
         id=user_data.id,
         color1="#000000",
         color2="#FFFFFF",
         # Add other fields as necessary
     )
-    record_data = db.query(Record).filter(Record.id == user_data.id).first()
+    record_data = db.query(Color).filter(Color.id == user_data.id).first()
     if record_data is not None:
         raise HTTPException(status_code=404, detail="Record already exists")
     db.add(new_recording)
     db.commit()
     db.refresh(new_recording)
     print(payload.get("user_id"))
-    return voice_schema.RecordingResponse(
+    return color_schema.ColorResponse(
         id=new_recording.id, color1="#000000", color2=new_recording.color2
     )
 
 
-@router.put("/recordingupdate", response_model=voice_schema.RecordingResponse)
+@router.put("/recordingupdate", response_model=color_schema.ColorResponse)
 async def get_recording(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
@@ -61,7 +82,7 @@ async def get_recording(
         if user_data is None:
             raise HTTPException(status_code=404, detail="User not found")
         record_id = user_data.id
-        record = db.query(Record).filter(Record.id == record_id).first()
+        record = db.query(Color).filter(Color.id == record_id).first()
         if record is None:
             raise HTTPException(status_code=404, detail="Record not found")
         # Update the record as needed
@@ -69,7 +90,7 @@ async def get_recording(
         db.commit()
         db.refresh(record)
 
-        return voice_schema.RecordingResponse(
+        return color_schema.ColorResponse(
             id=record.id, color1=record.color1, color2=record.color2
         )
     except Exception as e:

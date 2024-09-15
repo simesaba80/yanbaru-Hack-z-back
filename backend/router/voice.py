@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 import backend.schema.voice as voice_schema
 from backend.db import get_db
-from backend.models.voice import Record
+from backend.models.voice import Record, User
 
 router = APIRouter()
 
@@ -57,5 +57,35 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
 
 
 @router.put("/recording/{recording_id}", response_model=voice_schema.RecordingResponse)
-async def get_recording():
-    pass
+async def get_recording(
+    token: str = Depends(oauth2_scheme),
+    recording_id: int = None,
+    db: Session = Depends(get_db),
+):
+    payload = get_payload_from_token(token)
+    email = payload.get("email")
+    password = payload.get("password")
+    try:
+        user_data = (
+            db.query(User)
+            .filter(User.email == email)
+            .filter(User.password == password)
+            .first()
+        )
+        if user_data is None:
+            raise HTTPException(status_code=404, detail="Recording not found")
+        record_id = user_data.id
+        record = db.query(Record).filter(Record.id == record_id).first()
+        if record is None:
+            raise HTTPException(status_code=404, detail="Record not found")
+        # Update the record as needed
+        record.color1 = "#FF0000"  # Example update
+        db.commit()
+        db.refresh(record)
+
+        return voice_schema.RecordingResponse(
+            id=record.id, color1=record.color1, color2=record.color2
+        )
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=404, detail=str(e))

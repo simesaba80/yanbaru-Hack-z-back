@@ -9,7 +9,7 @@ def cutting_sound(sound):
 
     cutted_sound = sum(chunks)
 
-    if cutted_sound < 1000:
+    if len(cutted_sound) < 1000:
         raise HTTPException(status_code=400, detail="Bad Request")
 
     return cutted_sound

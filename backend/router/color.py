@@ -83,7 +83,10 @@ async def get_recording(
         # Update the record as needed
         file_path = color_cruds.get_filepath_by_id(db, user_data.user_id)
         download_blob("yanbaru-eisa-storage-bucket-prod", file_path, "/tmp/hoge.ogg")
+        if not os.path.exists("/tmp/hoge.ogg"):
+            raise HTTPException(status_code=404, detail="File not found")
         feature = sound_research("/tmp/hoge.ogg")
+        os.remove("/tmp/hoge.ogg")
         color1_data, color2_data = feature_to_color(feature)
         updated_record = color_cruds.update_color(
             db, record.id, color1_data, color2_data

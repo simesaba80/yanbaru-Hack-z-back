@@ -1,3 +1,6 @@
+from fastapi import HTTPException
+
+
 def speech_rating(sound):
     # 音声の長さ（ミリ秒）
     duration_ms = len(sound)
@@ -27,3 +30,5 @@ def speech_rating(sound):
     for i, threshold in enumerate(thresholds):
         if duration_ms <= threshold:
             return i
+
+    raise HTTPException(status_code=400, detail="Bad Request")

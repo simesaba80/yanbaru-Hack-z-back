@@ -1,6 +1,7 @@
 import math
 
 import numpy as np
+from fastapi import HTTPException
 
 
 def frequency_to_midi(frequency):
@@ -39,8 +40,8 @@ def midi_pitch_calculator(sound):
 
     pitch_class = get_pitch_class(frequency)
 
-    # もしfrequencyがNoneの場合、15を返す
+    # もしfrequencyがNoneの場合、400を返す
     if frequency is None:
-        return 15
+        raise HTTPException(status_code=400, detail="Bad Request")
 
     return pitch_class

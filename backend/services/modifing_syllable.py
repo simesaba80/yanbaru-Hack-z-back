@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+
 from backend.services.amplitude_peak_detector import amplitude_peak_detector
 from backend.services.divide_at_min_peak import divide_at_min_peak
 from backend.services.exclude_weakest_syllable import exclude_weakest_syllable
@@ -13,6 +15,9 @@ def handle_peak_detection_exception(exception_list):
     """
     例外処理
     """
+    if len(exception_list) == 0:
+        raise HTTPException(status_code=400, detail="Bad Request")
+
     # ratioが3.0に最も近いsyllable_listを返す
     syllable_list = min(exception_list, key=lambda x: abs(x[1] - 3.0))[0]
 

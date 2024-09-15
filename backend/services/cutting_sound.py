@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from pydub.silence import split_on_silence
 
 
@@ -7,5 +8,8 @@ def cutting_sound(sound):
     )
 
     cutted_sound = sum(chunks)
+
+    if cutted_sound < 1000:
+        raise HTTPException(status_code=400, detail="Bad Request")
 
     return cutted_sound

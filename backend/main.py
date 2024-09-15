@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from backend.router import match, voice
+from backend.router import color
 
 app = FastAPI()
 
@@ -10,5 +10,4 @@ async def root():
     return {"message": "Hello World!!"}
 
 
-app.include_router(voice.router)
-app.include_router(match.router)
+app.include_router(color.router)

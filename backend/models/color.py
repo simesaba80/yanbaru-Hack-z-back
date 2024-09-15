@@ -13,14 +13,14 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, nullable=False)
     eisafile = Column(String, nullable=False)
-    Record = relationship("Record", back_populates="users")
+    Color = relationship("Color", back_populates="users")
 
 
-class Record(Base):
-    __tablename__ = "records"
+class Color(Base):
+    __tablename__ = "colors"
 
     id = Column(Integer, ForeignKey("users.id"), primary_key=True, index=True)
     color1 = Column(String, nullable=False)
     color2 = Column(String, nullable=False)
 
-    users = relationship("User", back_populates="Record")
+    users = relationship("User", back_populates="Color")

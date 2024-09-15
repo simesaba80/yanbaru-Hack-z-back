@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 
 from backend.db import engine
-from backend.models.voice import Base, User
+from backend.models.color import Base, User
 
 # 接続テスト
 try:

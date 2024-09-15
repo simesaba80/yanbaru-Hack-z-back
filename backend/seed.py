@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 
 from backend.db import engine
-from backend.models.voice import Base, Record, User
+from backend.models.voice import Base, User
 
 # 接続テスト
 try:
@@ -28,10 +28,7 @@ test_user = User(
     email="kizuku@example.com",
     eisafile="testfile",
 )
-test_record = Record(id=1, color1="#000000", color2="#FFFFFF")
-
 session.add(test_user)
-session.add(test_record)
 session.commit()
 
 # セッションのクローズ

@@ -16,12 +16,24 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # Assuming you have a database session and models set up
     payload = get_payload_from_token(token)
+    user_data = (
+        db.query(User)
+        .filter(User.email == payload.get("email"))
+        .filter(User.password == payload.get("password"))
+        .first()
+    )
+    if user_data is None:
+        raise HTTPException(status_code=404, detail="User not found")
 
     new_recording = Record(
+        id=user_data.id,
         color1="#000000",
         color2="#FFFFFF",
         # Add other fields as necessary
     )
+    record_data = db.query(Record).filter(Record.id == user_data.id).first()
+    if record_data is not None:
+        raise HTTPException(status_code=404, detail="Record already exists")
     db.add(new_recording)
     db.commit()
     db.refresh(new_recording)
@@ -31,10 +43,9 @@ async def recording(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     )
 
 
-@router.put("/recording/{recording_id}", response_model=voice_schema.RecordingResponse)
+@router.put("/recordingupdate", response_model=voice_schema.RecordingResponse)
 async def get_recording(
     token: str = Depends(oauth2_scheme),
-    recording_id: int = None,
     db: Session = Depends(get_db),
 ):
     payload = get_payload_from_token(token)
@@ -48,7 +59,7 @@ async def get_recording(
             .first()
         )
         if user_data is None:
-            raise HTTPException(status_code=404, detail="Recording not found")
+            raise HTTPException(status_code=404, detail="User not found")
         record_id = user_data.id
         record = db.query(Record).filter(Record.id == record_id).first()
         if record is None:
